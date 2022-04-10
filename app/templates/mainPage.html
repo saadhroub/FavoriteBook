@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stylee.css' %}">
+</head>
+<body >
+
+    
+    <div class="header">
+        <h1 style="color: white;" >Welcome , {{user.first_name}}</h1>
+        <div style="display: flex;
+        width:20%;
+        align-items: center;
+        justify-content: space-around;">
+            
+            <a href="/" style="text-align: center; height: 50%;">log out</a>
+        </div>
+        
+    </div><br>
+    <div class="container">
+    <form action="/addfavbook/{{user.id}}" method="post">
+        {% csrf_token %}
+        <div style="width: 80%; height: 60%; margin-left: 10%;">
+            <h2>Add A favorites Book</h2>
+            <table>
+            <tr>
+                <td><label for="title">Title </label></td>
+                <td>  <input type="text" name="title" style="width: 60%; overflow: scroll; height: 25%; border: 2px solid black;"></input><br></td>
+            </tr>
+            <tr>
+                <td>  <label for="title">Description  </label></td>
+                <td> <input type="text" name="desc" style="width: 60%; overflow: scroll; height: 100%; border: 2px solid black;"></input><br></td>
+            </tr>
+        </table>
+          
+          
+           
+            <button type="submit" style="background-color: rgb(69, 69, 206); color: aliceblue; height: 30px; width: 100px;">Add</button>
+            {% if messages %}
+            
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+                
+            {% endif %}
+        </div>
+    </form>
+    <div>
+        <h2>All Books</h2>
+        {%for book in books%}
+        
+            <p><a href="/books/{{book.id}}"> {{book.title}}</a></p>
+            <p> added by {{book.uploaded_py.first_name}}-{{book.uploaded_py.last_name}}</p>
+            {% if book in user.liked_books.all %}
+            <p>this is one of your favorites</p>
+            
+            {%else%}
+            <p><a href="/addtofav/{{user.id}}/{{book.id}}">add to your favorites</a></p><br>
+            {%endif%}
+       
+        {%endfor%}
+    </div>
+   
+</div>
+
+</body>
+</html>
